@@ -737,31 +737,48 @@ app.use((err, req, res, next) => {
 // ==========================================
 
 const startServer = async () => {
-  try {
-    await mongoose.connect(MONGODB_URI);
-    console.log('MongoDB connected successfully');
+  const server = app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+    console.log(`Server URL: http://localhost:${PORT}`);
+  });
 
-    const server = app.listen(PORT, () => {
-      console.log(`Server listening on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
-    });
-
-    // Graceful Shutdown Handlers
-    const shutdown = async (signal) => {
-      console.log(`\nReceived ${signal}. Shutting down gracefully...`);
-      server.close(async () => {
-        console.log('HTTP server closed.');
+  // Graceful Shutdown Handlers
+  const shutdown = async (signal) => {
+    console.log(`\nReceived ${signal}. Shutting down gracefully...`);
+    server.close(async () => {
+      console.log('HTTP server closed.');
+      if (mongoose.connection.readyState !== 0) {
         await mongoose.connection.close();
         console.log('MongoDB connection closed.');
-        process.exit(0);
-      });
-    };
+      }
+      process.exit(0);
+    });
+  };
 
-    process.on('SIGINT', () => shutdown('SIGINT'));
-    process.on('SIGTERM', () => shutdown('SIGTERM'));
-  } catch (error) {
-    console.error('MongoDB connection failure:', error);
-    process.exit(1);
+  process.on('SIGINT', () => shutdown('SIGINT'));
+  process.on('SIGTERM', () => shutdown('SIGTERM'));
+
+  let uri = MONGODB_URI;
+  try {
+    console.log(`Connecting to MongoDB at ${uri}...`);
+    await mongoose.connect(uri, { serverSelectionTimeoutMS: 3000 });
+    console.log('MongoDB connected successfully');
+  } catch (primaryErr) {
+    console.warn('Could not connect to primary MongoDB service:', primaryErr.message);
+    console.log('Attempting fallback to in-memory MongoDB server for local development...');
+    try {
+      const { MongoMemoryServer } = require('mongodb-memory-server');
+      const mongod = await MongoMemoryServer.create();
+      uri = mongod.getUri();
+      await mongoose.connect(uri);
+      console.log(`In-memory MongoDB started and connected successfully!`);
+    } catch (memErr) {
+      console.error('Failed to connect to MongoDB fallback:', memErr.message);
+      console.warn('Note: To connect to MongoDB, start local MongoDB service at 127.0.0.1:27017 or set MONGODB_URI in .env');
+    }
   }
 };
 
 startServer();
+
+
