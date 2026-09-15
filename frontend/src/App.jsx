@@ -11,6 +11,7 @@ import { BoardContext, BoardProvider } from './context/BoardContext';
 import Login from './components/Auth/Login';
 import Signup from './components/Auth/Signup';
 import Dashboard from './components/Dashboard';
+import BoardDetail from './components/Dashboard/BoardDetail';
 
 import './styles/app.css';
 
@@ -44,8 +45,9 @@ const AppContent = () => {
       />
       <Route
         path="/board/:id"
-        element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />}
+        element={isAuthenticated ? <BoardDetail /> : <Navigate to="/login" replace />}
       />
+
 
 
       {/* Root Route Redirect */}
