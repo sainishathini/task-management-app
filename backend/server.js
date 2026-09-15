@@ -322,6 +322,25 @@ app.post(
   })
 );
 
+// GET /api/auth/me - Get current user profile
+app.get(
+  '/api/auth/me',
+  authenticateToken,
+  asyncHandler(async (req, res) => {
+    res.status(200).json({
+      success: true,
+      user: {
+        id: req.user._id,
+        name: req.user.name,
+        email: req.user.email,
+        createdAt: req.user.createdAt
+      }
+    }
+  );
+  })
+);
+
+
 // --- Board Routes ---
 
 // GET /api/boards - Get all user's boards
