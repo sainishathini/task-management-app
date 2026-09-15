@@ -6,7 +6,7 @@ import React, { useContext } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import { AuthContext, AuthProvider } from './context/AuthContext';
-import { BoardContext, BoardProvider } from './context/BoardContext';
+import { BoardProvider } from './context/BoardContext';
 
 import Login from './components/Auth/Login';
 import Signup from './components/Auth/Signup';
@@ -47,6 +47,7 @@ const AppContent = () => {
         path="/board/:id"
         element={isAuthenticated ? <BoardDetail /> : <Navigate to="/login" replace />}
       />
+
 
 
 
