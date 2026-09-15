@@ -37,11 +37,16 @@ const AppContent = () => {
         element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Signup />}
       />
 
-      {/* Protected Dashboard Route */}
+      {/* Protected Dashboard & Board Routes */}
       <Route
         path="/dashboard"
         element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />}
       />
+      <Route
+        path="/board/:id"
+        element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />}
+      />
+
 
       {/* Root Route Redirect */}
       <Route
