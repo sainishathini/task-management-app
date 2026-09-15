@@ -737,4 +737,88 @@ textarea:focus {
   background: #e2e8f0;
 }
 
+/* TaskCard Specific Class Enhancements */
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.task-completed {
+  opacity: 0.85;
+  background: #f8fafc;
+}
+
+.task-completed .task-title {
+  text-decoration: line-through;
+  color: #64748b;
+}
+
+.task-due-date {
+  margin-bottom: 12px;
+  font-size: 0.8rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.task-due-date.overdue {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.overdue-label {
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.task-status-select {
+  font-size: 0.78rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  color: #1e293b;
+  cursor: pointer;
+  width: auto;
+}
+
+.task-action-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-task-action {
+  padding: 4px 8px;
+  font-size: 0.78rem;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-weight: 500;
+}
+
+.btn-task-action:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+.btn-edit:hover {
+  background: #e0f2fe;
+  color: #0284c7;
+  border-color: #bae6fd;
+}
+
+.btn-delete:hover {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fecaca;
+}
+
+
 

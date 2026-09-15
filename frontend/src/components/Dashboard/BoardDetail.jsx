@@ -6,8 +6,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { BoardContext } from '../../context/BoardContext';
 import { AuthContext } from '../../context/AuthContext';
+import TaskCard from '../Task/TaskCard';
 
 const BoardDetail = () => {
+
   // 1 & 2. Get params and navigation
   const { id: routeBoardId } = useParams();
   const navigate = useNavigate();
@@ -415,87 +417,5 @@ const BoardDetail = () => {
   );
 };
 
-// Sub-component: TaskCard
-const TaskCard = ({ task, onEdit, onDelete, onStatusChange }) => {
-  const taskId = task._id || task.id;
-
-  const getPriorityBadgeClass = (priority) => {
-    switch (priority) {
-      case 'High':
-        return 'priority-high';
-      case 'Medium':
-        return 'priority-medium';
-      case 'Low':
-      default:
-        return 'priority-low';
-    }
-  };
-
-  const formattedDueDate = task.dueDate
-    ? new Date(task.dueDate).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-      })
-    : null;
-
-  const isOverdue =
-    task.dueDate &&
-    new Date(task.dueDate) < new Date() &&
-    task.status !== 'completed';
-
-  return (
-    <div className={`task-card ${task.status === 'completed' ? 'is-completed' : ''}`}>
-      <div className="task-card-header">
-        <h4 className="task-title">{task.title}</h4>
-        <span className={`priority-badge ${getPriorityBadgeClass(task.priority)}`}>
-          {task.priority}
-        </span>
-      </div>
-
-      {task.description && <p className="task-description">{task.description}</p>}
-
-      <div className="task-card-meta">
-        {formattedDueDate && (
-          <span className={`due-date ${isOverdue ? 'overdue' : ''}`}>
-            📅 {formattedDueDate} {isOverdue && '(Overdue)'}
-          </span>
-        )}
-      </div>
-
-      <div className="task-card-actions">
-        <div className="status-selector-wrapper">
-          <select
-            className="status-quick-select"
-            value={task.status}
-            onChange={(e) => onStatusChange(task, e.target.value)}
-          >
-            <option value="pending">Pending</option>
-            <option value="in-progress">In Progress</option>
-            <option value="completed">Completed</option>
-          </select>
-        </div>
-
-        <div className="task-btn-group">
-          <button
-            type="button"
-            className="btn-icon edit-btn"
-            onClick={() => onEdit(task)}
-            title="Edit Task"
-          >
-            ✏️
-          </button>
-          <button
-            type="button"
-            className="btn-icon delete-btn"
-            onClick={() => onDelete(taskId)}
-            title="Delete Task"
-          >
-            🗑️
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 export default BoardDetail;
+
